@@ -30,10 +30,10 @@ export default class Canvas {
     this.baseScene = new THREE.Scene();
 
     // ライトを作成
-    this.ambient = new THREE.AmbientLight(0xffffff, 0.5);
+    this.ambient = new THREE.AmbientLight(0xffffff, 0.65);
     this.baseScene.add(this.ambient);
 
-    this.light = new THREE.DirectionalLight(0xffffff, 0.6);
+    this.light = new THREE.DirectionalLight(0xffffff, 0.35);
     this.light.position.set(0, 0, 0); // ライトの位置を設定
     this.light.shadow.mapSize.width = 512;
     this.light.shadow.mapSize.height = 512;
@@ -48,7 +48,7 @@ export default class Canvas {
     const baseGeometry = new THREE.BoxGeometry(15, 15, 15);
     //const baseMaterial = new THREE.ShaderMaterial({uniforms: this.baseUniforms, vertexShader: baseVertexSource, fragmentShader: baseFragmentSource});
     const baseMaterial = new THREE.MeshLambertMaterial({color: 0x3e60d4});
-    this.targetColor = new THREE.Color(0x3e60d4);
+    this.targetBoxColor = new THREE.Color(0x3e60d4);
 
     // ジオメトリとマテリアルからメッシュを作成
     this.baseMesh = new THREE.Mesh(baseGeometry, baseMaterial);
@@ -60,7 +60,8 @@ export default class Canvas {
     this.baseScene.add(this.baseMesh);
 
     const flatGeometry = new THREE.PlaneGeometry(120, 100, 1, 1);
-    const flatMaterial = new THREE.MeshLambertMaterial({color: 0xa0a0a0});
+    const flatMaterial = new THREE.MeshLambertMaterial({color: 0xc0c0c0});
+    this.targetFlatColor = new THREE.Color(0xc0c0c0);
     this.flatMesh = new THREE.Mesh(flatGeometry, flatMaterial);
     this.flatMesh.position.z = -300;
     //this.flatMesh.receiveShadow = true;
@@ -107,22 +108,31 @@ export default class Canvas {
   changeColor(n) {
     switch (n) {
       case 1:
-        this.targetColor = new THREE.Color(0x3e60d4);
+        this.targetBoxColor = new THREE.Color(0x43658b);
         break;
       case 2:
-        this.targetColor = new THREE.Color(0x85dd86);
+        this.targetBoxColor = new THREE.Color(0x519872);
         break;
       case 3:
-        this.targetColor = new THREE.Color(0xdf8171);
+        this.targetBoxColor = new THREE.Color(0xf1c5c5);
         break;
+      case 4:
+        this.targetBoxColor = new THREE.Color(0x99d8d0);
+        break;
+      case 5:
+        this.targetBoxColor = new THREE.Color(0x856c8b);
+        break;
+      case 6:
+        this.targetBoxColor = new THREE.Color(0x363636);
+        break;
+      default:
+        this.targetBoxColor = new THREE.Color(0xffffff);
     }
 
-    TWEEN.removeAll();
-
     new TWEEN.Tween(this.baseMesh.material.color).to({
-      r: this.targetColor.r,
-      g: this.targetColor.g,
-      b: this.targetColor.b
+      r: this.targetBoxColor.r,
+      g: this.targetBoxColor.g,
+      b: this.targetBoxColor.b
     }, 1200).easing(TWEEN.Easing.Cubic.InOut).start();
   }
 
@@ -133,10 +143,16 @@ export default class Canvas {
 
   click() {
     this.baseMesh.material.wireframe = !this.baseMesh.material.wireframe;
-    this.flatMesh.material.color = this.baseMesh.material.wireframe
+
+    this.targetFlatColor = this.baseMesh.material.wireframe
       ? new THREE.Color(0x101010)
       : new THREE.Color(0xc0c0c0);
     //this.light.castShadow = !this.light.castShadow;
+    new TWEEN.Tween(this.flatMesh.material.color).to({
+      r: this.targetFlatColor.r,
+      g: this.targetFlatColor.g,
+      b: this.targetFlatColor.b
+    }, 4000).easing(TWEEN.Easing.Back.InOut).start();
   }
 
   mousemove(x, y) {

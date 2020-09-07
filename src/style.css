@@ -42,10 +42,11 @@ canvas {
 #container {
   width: 100%;
   height: 100%;
+  display: none;
 }
 
 #fp-nav ul li a span, .fp-slidesNav ul li a span {
-  background: #f0f0f0;
+  background: #3c485e;
 }
 
 #section {
@@ -59,5 +60,19 @@ canvas {
 
   color: #ffffff;
   font-family: 'Pacifico', cursive;
-  font-size: 2.0rem;
+  font-size: calc(1.5rem + ((1vw - 0.48rem) * 2.5));
+}
+
+.intro{
+  background: rgba(100,100,100,0.12);
+  padding: 1%;
+}
+
+.intro a{
+  background: linear-gradient(to right, rgb(41, 128, 185, 0.35), rgb(44, 62, 80, 0.15));
+  text-decoration: none;
+  padding: 0% 1%;
+
+  color: #ffffff;
+  font-size: 150%;
 }
